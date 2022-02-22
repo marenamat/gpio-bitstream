@@ -21,15 +21,16 @@ Yes, that is it. An udev script should then create the `/dev/gpio-bitstrem` file
 
 ## Bitrate setup
 
-After opening the device, the user must set the bitrate using `ioctl`. There
-are several possible ways to do this:
+After opening the device, the user must set the bitrate by writing into a sysfs
+file. There are several possible ways to do this:
 
-* `GPIO_BITSTREAM_BPS`, `(uint32_t *) bitrate` to set a bitrate in bits per second,
-* `GPIO_BITSTREAM_BPY`, `(uint64_t *) bitrate` to set a bitrate in bits per year (useful when your bitrate is not a whole number in *bps*)
-* `GPIO_BITSTREAM_DELAY`, `(uint64_t *) delay` to set delay between consecutive bits in picoseconds
+* `bps` to set a bitrate in bits per second,
+* `bpy`, to set a bitrate in bits per year (useful when your bitrate is not a whole number in *bps*; the *year* has exactly `60 * 60 * 24 * 365 = 31536000` seconds for this usage),
+* `delay`, to set delay between consecutive bits in nanoseconds
 
 Note that with higher bitrates you start not only getting electrical problems
 on the wire but also the kernel probably won't execute the timer fast enough.
+The bps and bpy values are converted to `delay`.
 
 ## Transmission
 
